@@ -8,16 +8,16 @@ parameters:
     description: Flavor to be used for compute instance
   key_name:
     type: string
-    description: For most clouds, the name of the key-pair to be used for the compute instance
+    description: Name of the key-pair to be used for the compute instance
   availability_zone:
     type: string
     description: Name of availability zone in which to create the instance
   private_network_id:
     type: string
-    description: Generated to reference private network.
+    description: Private network to attach to compute instance
   name:
     type: string
-    description: Generated
+    description: Name of the compute instance
   image:
     type: string
     description: Name of the image to create the compute instance
@@ -29,7 +29,7 @@ resources:
       networks:
           - port: { get_resource: private_network_id_port  }
       name: { get_param: name }
-      image: { get_param: image } 
+      image: { get_param: image }
       flavor: { get_param: flavor }
       key_name: { get_param: key_name }
       availability_zone: { get_param: availability_zone }
