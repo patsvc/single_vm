@@ -27,6 +27,19 @@ parameters:
     type: string
     description: 'Generated to reference ''vxw-dvs-116-virtualwire-1-sid-10000-lsw-transit-1'' network.'
     default: 'vxw-dvs-116-virtualwire-1-sid-10000-lsw-transit-1'
+  IBM::VMWare::Port:
+    type: string
+    description: 'vmware port'
+    default: '443'
+  IBM::VMWare::Host:
+    type: string
+    description: 'vmware host'
+  IBM::VMWare::Password:
+    type: string
+    description: 'vmware password'
+  IBM::VMWare::User:
+    type: string
+    description: 'vmware user'
 
 
 resources:
