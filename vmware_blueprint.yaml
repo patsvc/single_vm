@@ -1,0 +1,78 @@
+heat_template_version: 2013-05-23
+
+description: >
+  Created 9/6/16 by ucdpadmin. For Cloud admin@VCenter
+
+parameters:
+  flavor:
+    type: string
+    description: 'Flavor to be used for compute instance'
+  availability_zone:
+    type: string
+    description: 'Name of availability zone in which to create the instance'
+    default: 'nova'
+  vmware_destination_folder:
+    type: string
+    description: 'Destination folder for VMWare server'
+    default: ''
+  vmware_resource_pool:
+    type: string
+    description: 'Resource pool for VMWare cloud'
+  image:
+    type: string
+    description: 'PhotonOS-01'
+    label: Image
+    default: '503b3fe3-2f9f-8c38-fd23-315d204847be'
+  network-id__for__vxw-dvs-116-virtualwire-1-sid-10000-lsw-transit-1:
+    type: string
+    description: 'Generated to reference ''vxw-dvs-116-virtualwire-1-sid-10000-lsw-transit-1'' network.'
+    default: 'vxw-dvs-116-virtualwire-1-sid-10000-lsw-transit-1'
+  IBM::VMWare::Port:
+    type: string
+    description: 'vmware port'
+    default: '443'
+  IBM::VMWare::Host:
+    type: string
+    description: 'vmware host'
+    default: 'cbps-vcsa-01.usia.ibm.com'
+  IBM::VMWare::Password:
+    type: string
+    description: 'vmware password'
+    default: 'q1jtpLGZYrGvvPfOch5BSw'
+  IBM::VMWare::User:
+    type: string
+    description: 'vmware password'
+    default: 'orpheus-api@usia.ibm.com'
+
+
+resources:
+## REFERENCE {"vxw-dvs-116-virtualwire-1-sid-10000-lsw-transit-1":{"type": "OS::Neutron::Net", "properties": {"network_id": "vxw-dvs-116-virtualwire-1-sid-10000-lsw-transit-1", "external":"false", "subnets": [] }}}
+
+  PhotonOS-01:
+    type: OS::Nova::Server
+    properties:
+      networks:
+          - port: { get_resource: PhotonOS-01__to__vxw-dvs-116-virtualwire-1-sid-10000-lsw-transit-1__port  }
+      name: "PhotonOS-01"
+      image: { get_param: image }  # PhotonOS-01
+      flavor: { get_param: flavor }
+      availability_zone: { get_param: availability_zone }
+      metadata:
+        "__os_type__" : "Linux"
+    metadata:
+      vmware_properties:
+        destination_folder: { get_param: vmware_destination_folder }
+        resource_pool: { get_param: vmware_resource_pool }
+        # cluster: TODO
+
+
+  PhotonOS-01__to__vxw-dvs-116-virtualwire-1-sid-10000-lsw-transit-1__port:
+    type: OS::Neutron::Port
+    properties:
+      network_id: { get_param: network-id__for__vxw-dvs-116-virtualwire-1-sid-10000-lsw-transit-1 }
+      replacement_policy: AUTO   #TODO remove this if using HEAT version Icehouse!
+
+outputs:
+  blueprint_url:
+    description: Blueprint Origin URL
+    value:  https://ucdp.rtp.raleigh.ibm.com:8443/landscaper/view/projects?open=ucdpadmin_00000000_0000_0000_0000_000000000002-OrionContent/default/blueprint2.yml.yml
